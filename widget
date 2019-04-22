@@ -1,0 +1,90 @@
+#include <iostream> 
+#include <iomanip> 
+#include <cctype> 
+using namespace std;
+int main() {
+	double mozzRest = 5.00, mozzMenu = 7.00, burgRest = 9.00, burgMenu = 13.00, cakeRest = 4.00, cakeMenu = 6.00, orderTotal = 0;
+	double deliveryFee = 3.00, taxRate = 0.08, dailyTotal = 0.00, taxTotal = 0;
+	int mozzCount = 0, mozzTotal = 0, burgCount = 0, burgTotal = 0, cakeCount = 0, cakeTotal = 0, deliveryTotal = 0;
+	char orderMore = 'y', delivery = 'd', closing = 'n', choice;
+	cout << "Welcome to The Salty Spitoon! \n\n";
+	while (closing == 'n') {
+		while (orderMore == 'y') {
+			cout << "Appetizer Special: \tMozzarella Sticks (M) \nEntree Special: \tJalapeno Cheeseburger (B) \nDessert Special: \tClassic Cheesecake (C) \n";
+			cout << "What would you like? ";
+			cin >> choice;
+			choice = toupper(choice);
+			switch (choice) {
+			case 'M': mozzCount++, mozzTotal++;
+				orderTotal += mozzMenu;
+				cout << "An appetizer has been added to your order!\n";
+				break;
+			case 'B': burgCount++, burgTotal++;
+				orderTotal += burgMenu;
+				cout << "An entree has been added to your order!\n";
+				break;
+			case 'C': cakeCount++, cakeTotal++;
+				orderTotal += cakeMenu;
+				cout << "A dessert has been added to your order!\n";
+				break;
+			default: cout << "Sorry I didn't recognize that choice.\n";
+				break;
+			}
+			cout << "\nWould you like to order something else? (y/n): ";
+			cin >> orderMore;
+			orderMore = tolower(orderMore);
+			cout << "\n";
+		}
+		cout << "\nThank you for dining with us! Will this be Delivery or Take-out? (Enter D for Delivery or T for Take-out): ";
+		cin >> delivery;
+		delivery = tolower(delivery);
+
+		cout << "Qty\t\t\t\tPrice\n";
+		if (mozzCount > 0) {
+			cout << "\n" << mozzCount << " Mozzarella Sticks\t\t" << fixed << setprecision(2) << mozzCount * mozzMenu;
+		}
+		if (burgCount > 0) {
+			cout << "\n" << burgCount << " Jalapeno Cheeseburger\t\t" << fixed << setprecision(2) << burgCount * burgMenu;
+		}
+		if (cakeCount > 0) {
+			cout << "\n" << cakeCount << " Classic Cheesecake\t\t" << fixed << setprecision(2) << cakeCount * cakeMenu;
+		}
+		if (delivery == 'd') {
+			orderTotal += deliveryFee, deliveryTotal++, dailyTotal += orderTotal, taxTotal += (taxRate*orderTotal);
+			cout << "\n\nSubTotal: \t$" << fixed << setprecision(2) << orderTotal;
+			cout << "\nTax: \t\t$" << fixed << setprecision(2) << taxRate * orderTotal;
+			cout << "\nDelivery Fee: \t$" << fixed << setprecision(2) << deliveryFee;
+			cout << "\nTotal: \t$" << fixed << setprecision(2) << orderTotal + deliveryFee + (taxRate*orderTotal);
+		}
+		else {
+			dailyTotal += orderTotal, taxTotal += (taxRate*orderTotal);
+			cout << "\n\nSubTotal: \t$" << fixed << setprecision(2) << orderTotal;
+			cout << "\nTax: \t\t$" << fixed << setprecision(2) << taxRate * orderTotal;
+			cout << "\nTotal: \t\t$" << fixed << setprecision(2) << orderTotal + (taxRate*orderTotal);
+		}
+		break;
+	}
+	cout << "\n\nIs the restaurant closed for the night? (y/n): ";
+	cin >> closing;
+	closing = tolower(closing);
+	cout << "\nHere is a recap of today's business:\n\n";
+	cout << "Dish\t\t\t\tQty\t\tTotal Sales\t\tCost\t\tNet Profit\n";
+	if (mozzCount > 0) {
+		cout << "\nMozzarella Sticks\t\t" << mozzTotal << "\t\t" << (mozzTotal * mozzMenu) << "\t\t\t" << (mozzTotal * mozzRest)
+			<< "\t\t" << (mozzTotal*mozzMenu) - (mozzTotal*mozzRest);
+	}
+	if (burgCount > 0) {
+		cout << "\nJalapeno Cheeseburger\t\t" << burgTotal << "\t\t" << (burgTotal * burgMenu) << "\t\t\t" << (burgTotal * burgRest)
+			<< "\t\t" << (burgTotal*burgMenu) - (burgTotal*burgRest);
+	}
+	if (cakeCount > 0) {
+		cout << "\nClassic Cheesecake\t\t" << cakeTotal << "\t\t" << (cakeTotal * cakeMenu) << "\t\t\t" << (cakeTotal * cakeRest)
+			<< "\t\t" << (cakeTotal*cakeMenu) - (cakeTotal*cakeRest);
+	}
+	cout << "\n\n\t\t\t\t\t\t\t\t\tTotal Food Profit: \t$" << ((mozzTotal*mozzMenu) - (mozzTotal*mozzRest)) + ((burgTotal*burgMenu) - (burgTotal*burgRest)) + ((cakeTotal*cakeMenu) - (cakeTotal*cakeRest));
+	cout << "\n\t\t\t\t\t\t\t\t\tTotal Delivery Fees: \t$" << deliveryTotal * deliveryFee;
+	cout << "\n\t\t\t\t\t\t\t\t\tTotal Daily Profit: \t$" << (deliveryTotal * deliveryFee) + (((mozzTotal*mozzMenu) - (mozzTotal*mozzRest)) + ((burgTotal*burgMenu) - (burgTotal*burgRest)) + ((cakeTotal*cakeMenu) - (cakeTotal*cakeRest)));
+	cout << "\n\t\t\t\t\t\t\t\t\tTotal Tax Collected: \t$" << taxTotal;
+	cout << "\n\nWhat a good day! See you tomorrow! \n";
+}
+
